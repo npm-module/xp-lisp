@@ -5,7 +5,7 @@ import jsBeautify from "npm:js-beautify@1.15.4";
 const common = new OMLCommon();
 
 export function version() {
-  return "xp-lisp: version 2026.0305.200348";
+  return "xp-lisp: version 2026.0305.220416";
 }
 
 function compile_number(ast) {
@@ -134,7 +134,7 @@ function compile_ast(ast) {
   }
   case "def": {
     ast = common.to_def(ast);
-    return "$g." + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
+    return "$scope." + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
   }
   case "define": case "defun": case "defvar": {
     ast = common.to_def(ast);
@@ -428,9 +428,9 @@ function compile_do(ast) {
   return compile_ast(new_ast);
 }
 
-export function xpLisp($g) {
-  if (!$g) $g = {};
-  $g.compile_ast = (ast, debug) => {
+export function xpLisp($scope) {
+  if (!$scope) $scope = globalThis;
+  $scope.compile_ast = (ast, debug) => {
     if (debug)
       console.log(" [AST] " + JSON.stringify(ast));
     const code = compile_ast(ast);
@@ -438,7 +438,7 @@ export function xpLisp($g) {
       console.log("[JAVASCRIPT]\n" + jsBeautify(code) + "\n[/JAVASCRIPT]");
     return code;
   };
-  $g.compile = (text, debug) => {
+  $scope.compile = (text, debug) => {
     const steps = oml2ast(text);
     let result = "";
     for (const step of steps) {
@@ -455,8 +455,8 @@ export function xpLisp($g) {
     }
     return result;
   };
-  $g.exec_d = (exp) => $g.exec(exp, true);
-  $g.exec = (exp, debug) => {
+  $scope.exec_d = (exp) => $scope.exec(exp, true);
+  $scope.exec = (exp, debug) => {
     const src = exp;
     const steps = oml2ast(src);
     let last;
@@ -522,9 +522,9 @@ export function xpLisp($g) {
     }
     return last;
   };
-  $g.run = (exp) => $g.exec(exp, true);
-  $g.execAll = (exp, debug) => {
-    const text = $g.compile(exp, debug);
+  $scope.run = (exp) => $scope.exec(exp, true);
+  $scope.execAll = (exp, debug) => {
+    const text = $scope.compile(exp, debug);
     try {
       return eval(text);
     } catch (e) {
@@ -535,10 +535,10 @@ export function xpLisp($g) {
       throw e;
     }
   };
-  $g.runAll = (exp) => {
-    return $g.execAll(exp, true);
+  $scope.runAll = (exp) => {
+    return $scope.execAll(exp, true);
   };
-  return $g;
+  return $scope;
 }
 
 export function run(exp) {

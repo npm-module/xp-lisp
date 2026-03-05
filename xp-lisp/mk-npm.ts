@@ -6,7 +6,7 @@ await build({
     entryPoints: ["./src/xp-lisp.mjs"],
     outDir: "../npm-module",
     shims: {
-        deno: true,
+        deno: false,
     },
     package: {
         name: "xp-lisp",

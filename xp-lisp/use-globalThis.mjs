@@ -1,6 +1,6 @@
 import { xpLisp } from "./src/xp-lisp.mjs";
 
-const glob = xpLisp({});
+const glob = xpLisp();
 glob.run(`
 #lang lisp
 # 行コメント(1)
@@ -35,22 +35,22 @@ def")
 (console.log "str")
 (console.log "ハロー©")
 (define xyz 777)
-(console.log $scope.xyz)
+(console.log xyz)
 (console.log 123)
 (console.log (+ 11 22]
 
 (define x 123)
 (begin
-  (set! $scope.x (+ 1 $scope.x))
-  (set! $scope.x (+ 2 $scope.x))
-  (console.log $scope.x]
+  (set! x (+ 1 x))
+  (set! x (+ 2 x))
+  (console.log x]
 
 ;(Deno.exit 0)
 [dotimes (i 3) (console.log i]
 [dotimes (i 3) (dotimes (j 2) (console.log (list i j]
 (define x 11)
 (define y 22)
-(console.log (+ $scope.x $scope.y]
+(console.log (+ x y]
 [let ((a 33) (b 44)) (console.log (+ a b]
 [let* ((a 55) (b (+ 1 a))) (console.log (list a b]
 [let* [(a 55) (b (+ 1 a] (console.log (list a b]
@@ -62,16 +62,16 @@ def")
         [dotimes (i n)
           (set! factorial (* factorial (+ 1 i]
         factorial]
-(console.log ($scope.fact 4))
+(console.log (fact 4))
 (define (fact2 x)
   (do ((n 2 (+ 1 n)) (result 1))
       ((< x n) result)
       (set! result (* result n))))
-(console.log ($scope.fact2 4))
+(console.log (fact2 4))
 (console.log (&& (< 2 4) (< 3 4]
 (console.log (&& (< 2 4) (> 3 4]
   (try (throw 123)
   (catch ex (console.log ex]
 `);
 
-console.log(glob.fact2(4));
+console.log(fact2(4));
