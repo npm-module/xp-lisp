@@ -134,7 +134,8 @@ function compile_ast(ast) {
   }
   case "def": {
     ast = common.to_def(ast);
-    return "globalThis." + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
+    //return "globalThis." + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
+    return "var " + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
   }
   case "define": case "defun": case "defvar": {
     ast = common.to_def(ast);
@@ -473,7 +474,7 @@ export function xpLisp() {
         text = compile_ast(ast);
         if (debug)
           console.log("[JAVASCRIPT]\n" + jsBeautify(text) + "\n[/JAVASCRIPT]");
-        const val = eval(text);
+        const val = globalThis.eval(text);
         last = val;
         let output;
         if (typeof val === "function") {
@@ -526,7 +527,7 @@ export function xpLisp() {
   glob.execAll = (exp, debug) => {
     const text = glob.compile(exp, debug);
     try {
-      return eval(text);
+      return globalThis.eval(text);
     } catch (e) {
       if (e.stack)
         console.log(e.stack);
