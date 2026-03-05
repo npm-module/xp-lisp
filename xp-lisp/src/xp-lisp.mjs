@@ -134,8 +134,7 @@ function compile_ast(ast) {
   }
   case "def": {
     ast = common.to_def(ast);
-    //return "globalThis." + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
-    return "var " + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
+    return "$g." + common.to_id(ast[1]) + "=" + compile_ast(ast[2]);
   }
   case "define": case "defun": case "defvar": {
     ast = common.to_def(ast);
@@ -429,9 +428,9 @@ function compile_do(ast) {
   return compile_ast(new_ast);
 }
 
-export function xpLisp() {
-  const glob = {};
-  glob.compile_ast = (ast, debug) => {
+export function xpLisp($g) {
+  if (!$g) $g = {};
+  $g.compile_ast = (ast, debug) => {
     if (debug)
       console.log(" [AST] " + JSON.stringify(ast));
     const code = compile_ast(ast);
@@ -439,7 +438,7 @@ export function xpLisp() {
       console.log("[JAVASCRIPT]\n" + jsBeautify(code) + "\n[/JAVASCRIPT]");
     return code;
   };
-  glob.compile = (text, debug) => {
+  $g.compile = (text, debug) => {
     const steps = oml2ast(text);
     let result = "";
     for (const step of steps) {
@@ -456,8 +455,8 @@ export function xpLisp() {
     }
     return result;
   };
-  glob.exec_d = (exp) => glob.exec(exp, true);
-  glob.exec = (exp, debug) => {
+  $g.exec_d = (exp) => $g.exec(exp, true);
+  $g.exec = (exp, debug) => {
     const src = exp;
     const steps = oml2ast(src);
     let last;
@@ -474,7 +473,7 @@ export function xpLisp() {
         text = compile_ast(ast);
         if (debug)
           console.log("[JAVASCRIPT]\n" + jsBeautify(text) + "\n[/JAVASCRIPT]");
-        const val = globalThis.eval(text);
+        const val = eval(text);
         last = val;
         let output;
         if (typeof val === "function") {
@@ -523,11 +522,11 @@ export function xpLisp() {
     }
     return last;
   };
-  glob.run = (exp) => glob.exec(exp, true);
-  glob.execAll = (exp, debug) => {
-    const text = glob.compile(exp, debug);
+  $g.run = (exp) => $g.exec(exp, true);
+  $g.execAll = (exp, debug) => {
+    const text = $g.compile(exp, debug);
     try {
-      return globalThis.eval(text);
+      return eval(text);
     } catch (e) {
       if (e.stack)
         console.log(e.stack);
@@ -536,18 +535,18 @@ export function xpLisp() {
       throw e;
     }
   };
-  glob.runAll = (exp) => {
-    return glob.execAll(exp, true);
+  $g.runAll = (exp) => {
+    return $g.execAll(exp, true);
   };
-  return glob;
+  return $g;
 }
 
 export function run(exp) {
-  const o = xpLisp();
+  const o = xpLisp(globalThis);
   return o.run(exp);
 }
 
 export function runAll(exp) {
-  const o = xpLisp();
+  const o = xpLisp(globalThis);
   return o.runAll(exp);
 }
