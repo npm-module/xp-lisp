@@ -5,7 +5,7 @@ import jsBeautify from "npm:js-beautify@1.15.4";
 const common = new OMLCommon();
 
 export function version() {
-  return "xp-lisp: version 2026.0305.182712";
+  return "xp-lisp: version 2026.0305.194422";
 }
 
 function compile_number(ast) {
