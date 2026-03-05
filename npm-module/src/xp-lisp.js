@@ -1,6 +1,7 @@
-import { oml2ast, ast2oml as _ast2oml, astequal as _astequal } from "./oml2ast.mjs";
-import { OMLCommon } from "./omlcommon.mjs";
-import jsBeautify from "npm:js-beautify@1.15.4";
+import * as dntShim from "./_dnt.shims.js";
+import { oml2ast, ast2oml as _ast2oml, astequal as _astequal } from "./oml2ast.js";
+import { OMLCommon } from "./omlcommon.js";
+import jsBeautify from "js-beautify";
 
 const common = new OMLCommon();
 
@@ -542,11 +543,11 @@ export function xpLisp($g) {
 }
 
 export function run(exp) {
-  const o = xpLisp(globalThis);
+  const o = xpLisp(dntShim.dntGlobalThis);
   return o.run(exp);
 }
 
 export function runAll(exp) {
-  const o = xpLisp(globalThis);
+  const o = xpLisp(dntShim.dntGlobalThis);
   return o.runAll(exp);
 }
