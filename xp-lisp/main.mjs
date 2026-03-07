@@ -1,7 +1,8 @@
-import { xpLisp } from "./src/xp-lisp.mjs";
+#! /usr/bin/env -S deno -A
+import { lisp } from "./mod.js";
 
-const glob = xpLisp({});
-glob.run(`
+const scope = lisp({});
+scope.run(`
 #lang lisp
 # 行コメント(1)
 ##行コメント(2)
@@ -74,4 +75,4 @@ def")
   (catch ex (console.log ex]
 `);
 
-console.log(glob.fact2(4));
+console.log(scope.fact2(4));
