@@ -1,6 +1,6 @@
-#! /usr/bin/env -S deno test -A
+#! /usr/bin/env -S deno test -A --no-check
 import { assert } from "@std/assert";
-import { lisp } from "./mod.js";
+import { lisp, version, versionNumber } from "../npm-module/esm/mod.js";
 
 Deno.test("test#01", async () => {
   try {
