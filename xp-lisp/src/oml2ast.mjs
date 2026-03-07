@@ -1,21 +1,17 @@
 function tokenize(str) {
-  //console.debug("tokenize", str);
-    const re = /[\s,]*([()\[\]{}'`]|"(?:\\.|[^\\"])*"|[$]?@(?:@@|[^@])*@|;.*|#[!# ].*|#lang[ ]+.*|#[\|][\s\S]+?[\|]#|#[a-z]+|[^\s,()\[\]{}'"`;@]*)/g;
-    const result = [];
-    let token;
-    while ((token = re.exec(str)[1]) !== "") {
-        //console.debug(`token=${token}`);
-        if (token[0] === ";") continue;
-        if (token.startsWith("#!")) continue;
-        if (token.startsWith("##")) continue;
-        if (token.startsWith("# ")) continue;
-        if (token.startsWith("#lang ")) continue;
-        if (token.startsWith("#|") && !token.startsWith("#|@")) continue;
-        if (!token.startsWith("#@") && !token.startsWith("#|") && token.startsWith("#")) token = token.substring(1);
-        if (isFinite(token)) token = parseFloat(token, 10);
-        result.push(token);
-    }
-    return result;
+  const re =
+    /[:][a-z]+|[\s,]*([()\[\]{}'`]|"(?:\\.|[^\\"])*"|[$]?@(?:@@|[^@])*@|;.*|#[!# ].*|#lang[ ]+.*|#[\|][\s\S]+?[\|]#|#.*|[^\s,()\[\]{}'"`;@]*)/g;
+  const result = [];
+  let token;
+  while ((token = re.exec(str)[1]) !== "") {
+    if (token[0] === ";") continue;
+    if (token.startsWith("#!")) continue;
+    if (token.startsWith("#lang ")) continue;
+    if (!token.startsWith("#|@") && token.startsWith("#")) continue;
+    if (isFinite(token)) token = parseFloat(token, 10);
+    result.push(token);
+  }
+  return result;
 }
 
 function read_token(code, exp) {
@@ -59,72 +55,68 @@ function read_sexp(code, exp) {
   if (token === undefined) return undefined;
   if ((typeof token) === "number") return token;
   switch (token) {
-  case "false":
-    return false;
-  case "true":
-    return true;
-  case "null":
-    return null;
-  case "undefined":
-    return ["@", "undefined"];
+    case "false":
+      return false;
+    case "true":
+      return true;
+    case "null":
+      return null;
+    case "undefined":
+      return ["@", "undefined"];
   }
   let ch = token[0];
-    if (ch == "#") ch = token.slice(0, 2);
-    if (token.startsWith('$@')) {
-        ch = '$@';
-    }
+  if (ch == "#") ch = token.slice(0, 2);
+  if (token.startsWith("$@")) {
+    ch = "$@";
+  }
   switch (ch) {
-  case "(":
-  case "[":
-    {
+    case "(":
+    case "[": {
       const lst = read_list(code, exp, ch);
       return lst;
     }
-  case ")":
-  case "]":
-    return ch;
-  case "{":
-    return read_dict(code, exp);
-  case "}":
-    return ch;
-  case '"':
-    token = token.replaceAll("\r\n", "\n");
-    token = token.replaceAll("\n", "\\n");
-    token = JSON.parse(token);
-    return token;
-  case "@":
-    token = token.replace(/(^@|@$)/g, "");
-    token = token.replace(/(@@)/g, "@");
-    token = token.trim();
-    return ["@", token];
-  case "#|": {
-    if (token.startsWith("#|@")) {
-      token = token.replace(/^#[\|]@/g, "");
-      token = token.replace(/[\|]#$/g, "");
+    case ")":
+    case "]":
+      return ch;
+    case "{":
+      return read_dict(code, exp);
+    case "}":
+      return ch;
+    case '"':
+      token = token.replaceAll("\r\n", "\n");
+      token = token.replaceAll("\n", "\\n");
+      token = JSON.parse(token);
+      return token;
+    case "@":
+      token = token.replace(/(^@|@$)/g, "");
+      token = token.replace(/(@@)/g, "@");
       token = token.trim();
       return ["@", token];
+    case "#|": {
+      if (token.startsWith("#|@")) {
+        token = token.replace(/^#[\|]@/g, "");
+        token = token.replace(/[\|]#$/g, "");
+        token = token.trim();
+        return ["@", token];
+      }
+      return undefined;
     }
-    // not a "#|@" quoted string – handle as in the default branch
-    if (token[0] === ":") return token;
-    if (token[0] === "&") return token;
-    const ids = token[0] === "." ? [token] : token.split(".");
-    return ["#", ...ids];
-  }
-  case "$@": // template literal string
+    case "$@": // template literal string
       token = token.replaceAll("\r\n", "\n");
       token = token.replace(/(^[$]@|@$)/g, "");
       token = token.replace(/(@@)/g, "@");
       return ["$@", token];
-  default: {
-    //if (token[0] === ":") return token;
-    //if (token[0] === "&") return token;
-    if(!token.match(/^[_a-zA-Z][._a-zA-Z0-9]*$/)) {
-      //console.debug(`token=${token} does not match the identifier pattern`);
-       return ["#", token];
+    case ":": {
+      token = token.substring(1);
+      return ["@", token];
     }
-    const ids = token[0] === "." ? [token] : token.split(".");
-    return ["#", ...ids];
-  }
+    default: {
+      if (!token.match(/^[_a-zA-Z][._a-zA-Z0-9]*$/)) {
+        return ["#", token];
+      }
+      const ids = token[0] === "." ? [token] : token.split(".");
+      return ["#", ...ids];
+    }
   }
 }
 
@@ -136,11 +128,12 @@ function join_sexp(exp) {
     let token = exp.shift();
     if (
       token !== ")" &&
-        token !== "]" &&
-        (last !== "(") & (last !== "[") &&
-        last !== "'"
-    )
+      token !== "]" &&
+      (last !== "(") & (last !== "[") &&
+      last !== "'"
+    ) {
       result += " ";
+    }
     if (token === "[") token = "(";
     if (token === "]") token = ")";
     result += token;
@@ -177,12 +170,12 @@ export function ast2oml(ast) {
     }
     let keys = Object.keys(ast);
     const re = /^[0-9]+/;
-    keys = keys.filter(key => !re.test(key));
+    keys = keys.filter((key) => !re.test(key));
     keys.sort();
     if (keys.length > 0) {
       if (ast.length > 0) result += " ";
       result += "?";
-      for (let i=0; i<keys.length; i++) {
+      for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         result += " (";
         result += JSON.stringify(key);
@@ -214,7 +207,7 @@ export function astequal(a, b) {
   }
   if (a instanceof Function || b instanceof Function) {
     return false;
-  } else if (typeof (a) === 'object' && typeof (b) === 'object') {
+  } else if (typeof a === "object" && typeof b === "object") {
     const ak = Object.keys(a);
     const bk = Object.keys(b);
     if (ak.length !== bk.length) {
