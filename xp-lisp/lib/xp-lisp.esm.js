@@ -321,6 +321,7 @@ function compile_ast(ast2) {
   }
   if (common.is_script(ast2)) {
     let script = ast2[1];
+    script = script.replace(/::/g, ";");
     script = script.replace(/<string>/g, "`");
     script = script.replace(/<[/]string>/g, "`");
     script = script.replace(/({{)/g, "${");
@@ -866,7 +867,7 @@ function lisp1($scope, $system, $jsBeautify) {
 
 // standalone.js
 function version() {
-  return "standalone:xp-lisp: version 2026.0308.1159.35.02.37.48.01.01";
+  return "standalone:xp-lisp: version 2026.0308.1508.57.35.02.37.48.01.01";
 }
 function versionNumber() {
   const split = version().split(" ");
