@@ -4,16 +4,16 @@ import { lisp } from "./mod.js";
 const scope = lisp({});
 scope.run(`
 #lang lisp
-# 行コメント(1)
+<%sharp%> 行コメント(1)
 ##行コメント(2)
-;行コメント(3)
+<%semi%>行コメント(3)
 #|
 xyz();
 |#
 #|@
 console.log("XXX");
 |#
-(console.log $@answerA={{11+22}}@)
+(console<%dot%>log<%space%>$@answerA={{11+22}}@)
 (console.log ("$@" "answerB={{110+220}}"))
 (console.log $@
 answer1={{110+220}}

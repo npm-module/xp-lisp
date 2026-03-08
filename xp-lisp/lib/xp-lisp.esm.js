@@ -1,5 +1,83 @@
+// src/unescape.mjs
+function unescape(text2) {
+  text2 = text2.replace(/<%%>/g, "");
+  text2 = text2.replace(/<%dot%>/g, `.`);
+  text2 = text2.replace(/<%period%>/g, `.`);
+  text2 = text2.replace(/<%comma%>/g, `,`);
+  text2 = text2.replace(/<%dollar%>/g, `$`);
+  text2 = text2.replace(/<%dollar%>/g, `$`);
+  text2 = text2.replace(/<%backtick%>/g, "`");
+  text2 = text2.replace(/<%colon%>/g, `:`);
+  text2 = text2.replace(/<%semi-colon%>/g, `;`);
+  text2 = text2.replace(/<%semi%>/g, ";");
+  text2 = text2.replace(/<%semi-colon%>/g, `;`);
+  text2 = text2.replace(/<%single-quote%>/g, `'`);
+  text2 = text2.replace(/<%single%>/g, `'`);
+  text2 = text2.replace(/<%double-quote%>/g, `"`);
+  text2 = text2.replace(/<%double%>/g, `"`);
+  text2 = text2.replace(/<%sharp%>/g, `#`);
+  text2 = text2.replace(/<%percent%>/g, `%`);
+  text2 = text2.replace(/<%ampersand%>/g, `&`);
+  text2 = text2.replace(/<%amp%>/g, `&`);
+  text2 = text2.replace(/<%vertical-bar%>/g, `|`);
+  text2 = text2.replace(/<%vertical%>/g, `|`);
+  text2 = text2.replace(/<%and%>/g, `&&`);
+  text2 = text2.replace(/<%or%>/g, `||`);
+  text2 = text2.replace(/<%equal%>/g, `=`);
+  text2 = text2.replace(/<%equal-operator%>/g, `==`);
+  text2 = text2.replace(/<%equal-op%>/g, `==`);
+  text2 = text2.replace(/<%not-equal-operator%>/g, `!=`);
+  text2 = text2.replace(/<%not-equal-op%>/g, `!=`);
+  text2 = text2.replace(/<%tilde%>/g, `~`);
+  text2 = text2.replace(/<%slash%>/g, `/`);
+  text2 = text2.replace(/<%forward-slash%>/g, `/`);
+  text2 = text2.replace(/<%fore-slash%>/g, `/`);
+  text2 = text2.replace(/<%backslash%>/g, `\\`);
+  text2 = text2.replace(/<%backward-slash%>/g, `\\`);
+  text2 = text2.replace(/<%back-slash%>/g, `\\`);
+  text2 = text2.replace(/<%caret%>/g, `^`);
+  text2 = text2.replace(/<%hat%>/g, `^`);
+  text2 = text2.replace(/<%curly-bracket-start%>/g, `{`);
+  text2 = text2.replace(/<%curly-start%>/g, `{`);
+  text2 = text2.replace(/<%curly-bracket-end%>/g, `}`);
+  text2 = text2.replace(/<%curly-end%>/g, `}`);
+  text2 = text2.replace(/<%bracket-start%>/g, `[`);
+  text2 = text2.replace(/<%bracket-end%>/g, `]`);
+  text2 = text2.replace(/<%at%>/g, `@`);
+  text2 = text2.replace(/<%at-mark%>/g, `@`);
+  text2 = text2.replace(/<%plus%>/g, `+`);
+  text2 = text2.replace(/<%minus%>/g, `-`);
+  text2 = text2.replace(/<%divide%>/g, `/`);
+  text2 = text2.replace(/<%multiply%>/g, `*`);
+  text2 = text2.replace(/<%power%>/g, `**`);
+  text2 = text2.replace(/<%pow%>/g, `**`);
+  text2 = text2.replace(/<%paren-start%>/g, `(`);
+  text2 = text2.replace(/<%paren-end%>/g, `)`);
+  text2 = text2.replace(/<%question-mark%>/g, `?`);
+  text2 = text2.replace(/<%question%>/g, `?`);
+  text2 = text2.replace(/<%less-than%>/g, `<`);
+  text2 = text2.replace(/<%less%>/g, `<`);
+  text2 = text2.replace(/<%lt%>/g, `<`);
+  text2 = text2.replace(/<%greater-than%>/g, `>`);
+  text2 = text2.replace(/<%greater%>/g, `>`);
+  text2 = text2.replace(/<%gt%>/g, `>`);
+  text2 = text2.replace(/<%underscore%>/g, `_`);
+  text2 = text2.replace(/<%under%>/g, `_`);
+  text2 = text2.replace(/<%space%>/g, ` `);
+  text2 = text2.replace(/<%tab%>/g, `\\t`);
+  text2 = text2.replace(/<%cr%>/g, `\\r`);
+  text2 = text2.replace(/<%lf%>/g, `\\n`);
+  text2 = text2.replace(/<%exclamation-mark%>/g, `!`);
+  text2 = text2.replace(/<%exclamation-point%>/g, `!`);
+  text2 = text2.replace(/<%exclamation%>/g, `!`);
+  text2 = text2.replace(/<%bang%>/g, ``);
+  text2 = text2.replace(/<%shebang%>/g, `#!`);
+  return text2;
+}
+
 // src/oml2ast.mjs
 function tokenize(str) {
+  str = unescape(str);
   const re = /[:][a-z]+|[\s,]*([()\[\]{}'`]|"(?:\\.|[^\\"])*"|[$]?@(?:@@|[^@])*@|;.*|#[!# ].*|#lang[ ]+.*|#[\|][\s\S]+?[\|]#|#.*|[^\s,()\[\]{}'"`;@]*)/g;
   const result = [];
   let token;
@@ -868,7 +946,7 @@ function lisp1($scope, $system, $jsBeautify) {
 
 // standalone.js
 function version() {
-  return "standalone:xp-lisp: version 2026.0308.1717.10.57.35.02.37.48.01.01";
+  return "standalone:xp-lisp: version 2026.0309.0031.52.10.57.35.02.37.48.01.01";
 }
 function versionNumber() {
   const split = version().split(" ");

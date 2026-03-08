@@ -1,4 +1,7 @@
+import { unescape } from "./unescape.mjs";
+
 function tokenize(str) {
+  str = unescape(str);
   const re =
     /[:][a-z]+|[\s,]*([()\[\]{}'`]|"(?:\\.|[^\\"])*"|[$]?@(?:@@|[^@])*@|;.*|#[!# ].*|#lang[ ]+.*|#[\|][\s\S]+?[\|]#|#.*|[^\s,()\[\]{}'"`;@]*)/g;
   const result = [];
