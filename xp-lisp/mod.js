@@ -1,7 +1,8 @@
+import jsBeautify from "npm:js-beautify@1.15.4";
 import { lisp1 } from "./src/lisp1.mjs";
 
 export function version() {
-  return "npm:xp-lisp: version 2026.308.45147";
+  return "npm:xp-lisp: version 2026.308.115907";
 }
 
 export function versionNumber() {
@@ -10,5 +11,5 @@ export function versionNumber() {
 }
 
 export function lisp($scope, $system) {
-  return lisp1($scope, $system);
+  return lisp1($scope, $system, jsBeautify);
 }
