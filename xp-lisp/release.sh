@@ -2,7 +2,7 @@
 set -uvx
 set -e
 cwd=`pwd`
-ts=`date "+%Y.%-m%d.%-H%M%S"`
+ts=`date "+%Y.%-m%d.%-H%M%S" | sed -e 's/[.]0/./g'`
 version=${ts}
 ./init.sh
 sed -i -e "s/version [0-9]*[.][0-9]*[.][0-9]*/version ${ts}/g" mod.js
