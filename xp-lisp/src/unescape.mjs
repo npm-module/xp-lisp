@@ -66,6 +66,7 @@ export function unescape(text) {
   text = text.replace(/<%tab%>/g, `\\t`);
   text = text.replace(/<%cr%>/g, `\\r`);
   text = text.replace(/<%lf%>/g, `\\n`);
+  text = text.replace(/<%null%>/g, `\\0`);
   text = text.replace(/<%exclamation-mark%>/g, `!`);
   text = text.replace(/<%exclamation-point%>/g, `!`);
   text = text.replace(/<%exclamation%>/g, `!`);

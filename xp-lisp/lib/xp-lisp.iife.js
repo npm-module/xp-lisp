@@ -94,6 +94,7 @@ var lisp = (() => {
     text2 = text2.replace(/<%tab%>/g, `\\t`);
     text2 = text2.replace(/<%cr%>/g, `\\r`);
     text2 = text2.replace(/<%lf%>/g, `\\n`);
+    text2 = text2.replace(/<%null%>/g, `\\0`);
     text2 = text2.replace(/<%exclamation-mark%>/g, `!`);
     text2 = text2.replace(/<%exclamation-point%>/g, `!`);
     text2 = text2.replace(/<%exclamation%>/g, `!`);
@@ -973,7 +974,7 @@ var lisp = (() => {
 
   // standalone.js
   function version() {
-    return "standalone:xp-lisp: version 2026.0309.0050.22.52.10.57.35.02.37.48.01.01";
+    return "standalone:xp-lisp: version 2026.0309.0145.55.49.22.52.10.57.35.02.37.48.01.01";
   }
   function versionNumber() {
     const split = version().split(" ");
