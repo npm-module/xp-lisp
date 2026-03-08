@@ -23,7 +23,7 @@ Deno.test("test#02", async () => {
     scope.run(
       `
 #|@
-globalThis.xyz = 123 ::
+globalThis.x%%y%%z = 123 ::
 |#
 
 (defun add2 (a b) (+ a b xyz))
