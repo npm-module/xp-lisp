@@ -348,6 +348,7 @@ var lisp = (() => {
     }
     if (common.is_script(ast2)) {
       let script = ast2[1];
+      script = script.replace(/%%/g, "");
       script = script.replace(/::/g, ";");
       script = script.replace(/<string>/g, "`");
       script = script.replace(/<[/]string>/g, "`");
@@ -894,7 +895,7 @@ var lisp = (() => {
 
   // standalone.js
   function version() {
-    return "standalone:xp-lisp: version 2026.0308.1508.57.35.02.37.48.01.01";
+    return "standalone:xp-lisp: version 2026.0308.1717.10.57.35.02.37.48.01.01";
   }
   function versionNumber() {
     const split = version().split(" ");
