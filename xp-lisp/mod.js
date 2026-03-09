@@ -2,7 +2,7 @@ import jsBeautify from "npm:js-beautify@1.15.4";
 import { lisp1 } from "./src/lisp1.mjs";
 
 export function version() {
-  return "npm:xp-lisp: version 2026.310.80027";
+  return "npm:xp-lisp: version 2026.310.80122";
 }
 
 export function versionNumber() {
