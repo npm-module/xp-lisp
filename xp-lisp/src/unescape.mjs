@@ -1,5 +1,5 @@
 export function unescape(text) {
-  text = text.replace(/<%%>/g, "");
+  text = text.replace(/<%%>/g, "`");
   text = text.replace(/<%dot%>/g, `.`);
   text = text.replace(/<%period%>/g, `.`);
   text = text.replace(/<%comma%>/g, `,`);

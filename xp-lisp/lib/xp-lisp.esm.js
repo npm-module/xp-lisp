@@ -1,6 +1,6 @@
 // src/unescape.mjs
 function unescape(text2) {
-  text2 = text2.replace(/<%%>/g, "");
+  text2 = text2.replace(/<%%>/g, "`");
   text2 = text2.replace(/<%dot%>/g, `.`);
   text2 = text2.replace(/<%period%>/g, `.`);
   text2 = text2.replace(/<%comma%>/g, `,`);
@@ -400,7 +400,7 @@ function compile_ast(ast2) {
   }
   if (common.is_script(ast2)) {
     let script = ast2[1];
-    script = script.replace(/%%/g, "");
+    script = script.replace(/%%/g, "`");
     script = script.replace(/::/g, ";");
     script = script.replace(/<string>/g, "`");
     script = script.replace(/<[/]string>/g, "`");
@@ -947,7 +947,7 @@ function lisp1($scope, $system, $jsBeautify) {
 
 // standalone.js
 function version() {
-  return "standalone:xp-lisp: version 2026.0309.1923.38.42.04.38.23.55.49.22.52.10.57.35.02.37.48.01.01";
+  return "standalone:xp-lisp: version 2026.310.53940";
 }
 function versionNumber() {
   const split = version().split(" ");

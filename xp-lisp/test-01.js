@@ -23,7 +23,8 @@ Deno.test("test#02", async () => {
     scope.run(
       `
 #|@
-globalThis.x%%y%%z = 123 ::
+globalThis.xyz = 123 ::
+globalThis.msg = %%xyz={{xyz}}%% ::
 |#
 
 (defun add2 (a b) (+ a b xyz))
@@ -31,6 +32,7 @@ globalThis.x%%y%%z = 123 ::
     const answer = add2(11, 22);
     console.log(`answer=${answer}`);
     assert(answer == 156);
+    console.log(msg);
   } finally {
     ;
   }
