@@ -5,6 +5,7 @@ import {
 } from "./oml2ast.mjs";
 import { OMLCommon } from "./omlcommon.mjs";
 //import jsBeautify from "npm:js-beautify@1.15.4";
+import { beautifyCode } from "./babel-transform.mjs";
 
 const common = new OMLCommon();
 
@@ -521,9 +522,9 @@ function compile_do(ast) {
 export function lisp1($scope, $system, $jsBeautify) {
   if (!$scope) $scope = {};
   if (!$jsBeautify) {
-    $jsBeautify = function (code) {
+    $jsBeautify = beautifyCode; /*function (code) {
       return code;
-    };
+    };*/
   }
   $scope.evalJS = (code) => {
     return eval(code);
