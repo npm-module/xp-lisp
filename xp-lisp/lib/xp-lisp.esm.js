@@ -947,7 +947,7 @@ function lisp1($scope, $system, $jsBeautify) {
 
 // standalone.js
 function version() {
-  return "standalone:xp-lisp: version 2026.310.61341";
+  return "standalone:xp-lisp: version 2026.310.61449";
 }
 function versionNumber() {
   const split = version().split(" ");
