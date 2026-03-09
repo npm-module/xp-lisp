@@ -28,11 +28,13 @@ globalThis.msg = %%xyz={{xyz}}%% ::
 |#
 
 (defun add2 (a b) (+ a b xyz))
+(defun greeting (name) @%%Hello {{name}}!%%@)
 `);
     const answer = add2(11, 22);
     console.log(`answer=${answer}`);
     assert(answer == 156);
     console.log(msg);
+    console.log(greeting("tom"));
   } finally {
     ;
   }

@@ -238,6 +238,8 @@ var lisp = (() => {
     return result;
   }
   function oml2ast(text2) {
+    text2 = text2.replace(/%%/g, "`");
+    text2 = text2.replace(/::/g, ";");
     const code2 = tokenize(text2);
     const result = [];
     while (true) {
@@ -427,8 +429,6 @@ var lisp = (() => {
     }
     if (common.is_script(ast2)) {
       let script = ast2[1];
-      script = script.replace(/%%/g, "`");
-      script = script.replace(/::/g, ";");
       script = script.replace(/<string>/g, "`");
       script = script.replace(/<[/]string>/g, "`");
       script = script.replace(/({{)/g, "${");
@@ -974,7 +974,7 @@ var lisp = (() => {
 
   // standalone.js
   function version() {
-    return "standalone:xp-lisp: version 2026.310.60531";
+    return "standalone:xp-lisp: version 2026.310.61341";
   }
   function versionNumber() {
     const split = version().split(" ");

@@ -211,6 +211,8 @@ function join_sexp(exp2) {
   return result;
 }
 function oml2ast(text2) {
+  text2 = text2.replace(/%%/g, "`");
+  text2 = text2.replace(/::/g, ";");
   const code2 = tokenize(text2);
   const result = [];
   while (true) {
@@ -400,8 +402,6 @@ function compile_ast(ast2) {
   }
   if (common.is_script(ast2)) {
     let script = ast2[1];
-    script = script.replace(/%%/g, "`");
-    script = script.replace(/::/g, ";");
     script = script.replace(/<string>/g, "`");
     script = script.replace(/<[/]string>/g, "`");
     script = script.replace(/({{)/g, "${");
@@ -947,7 +947,7 @@ function lisp1($scope, $system, $jsBeautify) {
 
 // standalone.js
 function version() {
-  return "standalone:xp-lisp: version 2026.310.60531";
+  return "standalone:xp-lisp: version 2026.310.61341";
 }
 function versionNumber() {
   const split = version().split(" ");

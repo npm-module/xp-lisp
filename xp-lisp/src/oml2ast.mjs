@@ -146,6 +146,8 @@ function join_sexp(exp) {
 }
 
 export function oml2ast(text) {
+  text = text.replace(/%%/g, "`");
+  text = text.replace(/::/g, ";");
   const code = tokenize(text);
   const result = [];
   while (true) {
