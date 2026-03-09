@@ -5,7 +5,7 @@ import {
 } from "./oml2ast.mjs";
 import { OMLCommon } from "./omlcommon.mjs";
 //import jsBeautify from "npm:js-beautify@1.15.4";
-//import { beautifyCode } from "./babel-transform.mjs";
+import { beautifyCode } from "./babel-transform.mjs";
 
 const common = new OMLCommon();
 
@@ -195,18 +195,21 @@ function compile_ast(ast) {
       const result_exp = ast1.length < 3 ? common.id("null") : ast1[2];
       const bind = [
         [common.id("__dotimes_cnt__"), ast1[1]],
-        [common.id("__dotimes_idx__"), 0, [
-          common.id("+"),
+        [
           common.id("__dotimes_idx__"),
-          1,
-        ]],
+          0,
+          [common.id("+"), common.id("__dotimes_idx__"), 1],
+        ],
         [ast1[0], common.id("__dotimes_idx__"), common.id("__dotimes_idx__")],
       ];
-      const exit = [[
-        common.id(">="),
-        common.id("__dotimes_idx__"),
-        common.id("__dotimes_cnt__"),
-      ], result_exp];
+      const exit = [
+        [
+          common.id(">="),
+          common.id("__dotimes_idx__"),
+          common.id("__dotimes_cnt__"),
+        ],
+        result_exp,
+      ];
       ast = [common.id("do*"), bind, exit].concat(ast.slice(2));
       return compile_ast(ast);
     }
@@ -220,13 +223,19 @@ function compile_ast(ast) {
     }
     case "prop-set!": {
       if (ast.length != 4) return new Error("syntax error");
-      return compile_ast(ast[1]) + "[" + compile_ast(ast[2]) + "]=" +
-        compile_ast(ast[3]);
+      return (
+        compile_ast(ast[1]) +
+        "[" +
+        compile_ast(ast[2]) +
+        "]=" +
+        compile_ast(ast[3])
+      );
     }
     case "dolist": {
       let ast1 = ast[1];
       if (
-        common.is_variable(ast1) || !common.is_array(ast1) ||
+        common.is_variable(ast1) ||
+        !common.is_array(ast1) ||
         common.is_quoted(ast1)
       ) {
         ast1 = [common.id("$item"), ast1];
@@ -236,41 +245,50 @@ function compile_ast(ast) {
       const result_exp = ast1.length < 3 ? common.id("null") : ast1[2];
       const bind = [
         [common.id("__dolist_list__"), ast1[1]],
-        [common.id("__dolist_cnt__"), [
-          common.id("length"),
-          common.id("__dolist_list__"),
-        ]],
-        [common.id("__dolist_idx__"), 0, [
-          common.id("+"),
+        [
+          common.id("__dolist_cnt__"),
+          [common.id("length"), common.id("__dolist_list__")],
+        ],
+        [
           common.id("__dolist_idx__"),
-          1,
-        ]],
-        [ast1[0], [
-          common.id("prop-get"),
-          common.id("__dolist_list__"),
-          common.id("__dolist_idx__"),
-        ], [
-          common.id("prop-get"),
-          common.id("__dolist_list__"),
-          common.id("__dolist_idx__"),
-        ]],
+          0,
+          [common.id("+"), common.id("__dolist_idx__"), 1],
+        ],
+        [
+          ast1[0],
+          [
+            common.id("prop-get"),
+            common.id("__dolist_list__"),
+            common.id("__dolist_idx__"),
+          ],
+          [
+            common.id("prop-get"),
+            common.id("__dolist_list__"),
+            common.id("__dolist_idx__"),
+          ],
+        ],
       ];
-      const exit = [[
-        common.id(">="),
-        common.id("__dolist_idx__"),
-        common.id("__dolist_cnt__"),
-      ], result_exp];
+      const exit = [
+        [
+          common.id(">="),
+          common.id("__dolist_idx__"),
+          common.id("__dolist_cnt__"),
+        ],
+        result_exp,
+      ];
       ast = [common.id("do*"), bind, exit].concat(ast.slice(2));
       return compile_ast(ast);
     }
     case "if":
-      return ("(" +
+      return (
+        "(" +
         compile_ast(ast[1]) +
         "?" +
         compile_ast(ast[2]) +
         ":" +
         compile_body(ast, 3) +
-        ")");
+        ")"
+      );
     case "let":
     case "let*": {
       const ast1 = ast[1];
@@ -308,21 +326,25 @@ function compile_ast(ast) {
       vars += ")";
       vals += ")";
       if (common.to_id(ast[0]) === "_let") {
-        return ("((function" +
+        return (
+          "((function" +
           vars +
           "{return " +
           compile_body(ast, 2) +
           "})" +
           vals +
-          ")");
+          ")"
+        );
       } else {
-        return ("((function" +
+        return (
+          "((function" +
           vars +
           "{" +
           assigns +
           "return " +
           compile_body(ast, 2) +
-          "})())");
+          "})())"
+        );
       }
     }
     case "list": {
@@ -366,7 +388,7 @@ function compile_ast(ast) {
       return compile_ast(ast);
     }
     case "dict": {
-      if ((ast.length % 2) !== 1) throw new Error("synatx error");
+      if (ast.length % 2 !== 1) throw new Error("synatx error");
       const body = [];
       for (let i = 1; i < ast.length; i += 2) {
         body.push([
@@ -393,8 +415,8 @@ function compile_ast(ast) {
     case "try": {
       let result = "(function(){try{return " + compile_ast(ast[1]) + "}catch(";
       if (common.to_id(ast[2][0]) != "catch") throw "try without catch clause";
-      result += common.to_id(ast[2][1]) + "){return " +
-        compile_body(ast[2], 2) + "}";
+      result +=
+        common.to_id(ast[2][1]) + "){return " + compile_body(ast[2], 2) + "}";
       result += "})()";
       return result;
     }
@@ -404,11 +426,13 @@ function compile_ast(ast) {
       if (common.to_id(ast[0]) === "until") {
         condition = "!" + condition;
       }
-      return ("((function(){while(" +
+      return (
+        "((function(){while(" +
         condition +
         "){" +
         compile_body(ast, 2) +
-        "}})(),null)");
+        "}})(),null)"
+      );
     }
     case ".": {
       const op = "+";
@@ -431,8 +455,13 @@ function compile_ast(ast) {
     case ">":
     case "<=":
     case ">=":
-      return "(" + compile_number(ast[1]) + common.to_id(ast[0]) +
-        compile_number(ast[2]) + ")";
+      return (
+        "(" +
+        compile_number(ast[1]) +
+        common.to_id(ast[0]) +
+        compile_number(ast[2]) +
+        ")"
+      );
     case "&&":
     case "||":
     case "&":
@@ -512,8 +541,10 @@ function compile_do(ast) {
       until_ast.push(next_step);
     });
   }
-  const new_ast = [parallel ? common.id("_let") : common.id("_let*"), ast1_vars]
-    .concat([until_ast]);
+  const new_ast = [
+    parallel ? common.id("_let") : common.id("_let*"),
+    ast1_vars,
+  ].concat([until_ast]);
   new_ast.push(ast2[1]);
   return compile_ast(new_ast);
 }
@@ -522,9 +553,9 @@ function compile_do(ast) {
 export function lisp1($scope, $system, $jsBeautify) {
   if (!$scope) $scope = {};
   if (!$jsBeautify) {
-    $jsBeautify = function (code) {
+    $jsBeautify = beautifyCode; /*function (code) {
       return code;
-    };
+      };*/
   }
   $scope.evalJS = (code) => {
     return eval(code);
@@ -591,8 +622,8 @@ export function lisp1($scope, $system, $jsBeautify) {
           Object.prototype.toString.call(val) !== "[object Object]"
         ) {
           try {
-            output = Object.prototype.toString.call(val) + " " +
-              JSON.stringify(val);
+            output =
+              Object.prototype.toString.call(val) + " " + JSON.stringify(val);
           } catch (_e) {
             // ignore
           }
