@@ -13,3 +13,4 @@ esbuild ./standalone.js --bundle --format=esm  --outfile=lib/xp-lisp.esm.js
 esbuild ./standalone.js --bundle --format=iife --outfile=lib/xp-lisp.iife.js --global-name=lisp
 ls -ltrh ./lib
 cp -pv lib/* ~/cmd/
+cp -pv lib/* ~/util/lisp/
