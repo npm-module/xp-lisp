@@ -3,7 +3,7 @@
 set -e
 cd "$(dirname "$0")"
 cwd=`pwd`
-ts=`date "+%Y.%m%d.%H%M.%S"`
+ts=`date "+%Y.%-m%d.%-H%M%S" | sed -e 's/[.]0/./g'`
 if ! command -v esbuild &> /dev/null; then
     npm install -g esbuild
 fi
