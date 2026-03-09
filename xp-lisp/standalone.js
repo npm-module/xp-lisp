@@ -1,7 +1,7 @@
 import { lisp1 } from "./src/lisp1.mjs";
 
 export function version() {
-  return "standalone:xp-lisp: version 2026.0309.0145.55.49.22.52.10.57.35.02.37.48.01.01";
+  return "standalone:xp-lisp: version 2026.0309.1726.38.23.55.49.22.52.10.57.35.02.37.48.01.01";
 }
 
 export function versionNumber() {
