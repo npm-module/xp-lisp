@@ -974,7 +974,7 @@ var lisp = (() => {
 
   // standalone.js
   function version() {
-    return "standalone:xp-lisp: version 2026.0309.1911.42.04.38.23.55.49.22.52.10.57.35.02.37.48.01.01";
+    return "standalone:xp-lisp: version 2026.0309.1923.38.42.04.38.23.55.49.22.52.10.57.35.02.37.48.01.01";
   }
   function versionNumber() {
     const split = version().split(" ");
