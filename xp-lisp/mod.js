@@ -1,9 +1,9 @@
 //import jsBeautify from "npm:js-beautify@1.15.4";
 import { lisp1 } from "./src/lisp1.mjs";
-import { beautifyCode as bc } from "./src/babel-transform.mjs";
+import { beautifyCode as _beautifyCode } from "./src/babel-transform.mjs";
 
 export function version() {
-  return "npm:xp-lisp: version 2026.312.5614";
+  return "npm:xp-lisp: version 2026.312.11005";
 }
 
 export function versionNumber() {
@@ -15,4 +15,6 @@ export function lisp($scope, $system) {
   return lisp1($scope, $system, undefined /*jsBeautify*/);
 }
 
-export const beautifyCode = bc;
+export function beautifyCode() {
+  return _beautifyCode(...arguments);
+}
