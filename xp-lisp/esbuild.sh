@@ -14,3 +14,4 @@ esbuild ./standalone.js --bundle --format=iife --outfile=lib/xp-lisp.iife.js --g
 ls -ltrh ./lib
 cp -pv lib/* ~/cmd/
 cp -pv lib/* ~/util/lisp/
+cp -pv lib/* ~/@sub/open-lisp/open-lisp/lib/

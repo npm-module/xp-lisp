@@ -13,7 +13,8 @@ xyz();
 #|@
 console.log("XXX");
 |#
-(console<%dot%>log<%space%>$@answerA={{11+22}}@)
+(console.log @<%>a={{11+22}}<%>@)
+(console<%dot%>log<%space%>$@answerA<#>={{11+22}}@)
 (console.log ("$@" "answerB={{110+220}}"))
 (console.log $@
 answer1={{110+220}}

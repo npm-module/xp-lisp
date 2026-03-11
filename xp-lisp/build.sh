@@ -12,5 +12,5 @@ rm -rf $cwd/../npm-module/esm/tmp
 rm -rf $cwd/../npm-module/script/tmp
 rmdir npm
 deno test -A test-01.js
-./src/backport.sh
+#./src/backport.sh
 ./esbuild.sh

@@ -1,5 +1,9 @@
 export function unescape(text) {
-  text = text.replace(/<%%>/g, "`");
+  text = text.replace(/{{/g, "${");
+  text = text.replace(/}}/g, "}");
+  text = text.replace(/<string>/g, "`");
+  text = text.replace(/<[/]string>/g, "`");
+  text = text.replace(/<%>/g, "`");
   text = text.replace(/<%dot%>/g, `.`);
   text = text.replace(/<%period%>/g, `.`);
   text = text.replace(/<%comma%>/g, `,`);
@@ -72,5 +76,6 @@ export function unescape(text) {
   text = text.replace(/<%exclamation%>/g, `!`);
   text = text.replace(/<%bang%>/g, ``);
   text = text.replace(/<%shebang%>/g, `#!`);
+  text = text.replace(/<#>/g, "");
   return text;
 }
