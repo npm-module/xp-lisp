@@ -14,4 +14,4 @@ esbuild ./mod.js --bundle --format=iife --outfile=lib/xp-lisp.iife.js --global-n
 ls -ltrh ./lib
 cp -pv lib/* ~/cmd/
 cp -pv lib/* ~/util/lisp/
-cp -pv lib/* ~/@sub/open-lisp/open-lisp/lib/
+cp -pv lib/* ~/sub/open-lisp/open-lisp/lib/

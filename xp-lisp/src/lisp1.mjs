@@ -83,12 +83,6 @@ function compile_ast(ast) {
   }
   if (common.is_script(ast)) {
     let script = ast[1];
-    //script = script.replace(/%%/g, "`");
-    //script = script.replace(/::/g, ";");
-    // script = script.replace(/<string>/g, "`");
-    // script = script.replace(/<[/]string>/g, "`");
-    //script = script.replace(/({{)/g, "${");
-    //script = script.replace(/(}})/g, "}");
     return script;
   }
   if (common.is_template(ast)) {

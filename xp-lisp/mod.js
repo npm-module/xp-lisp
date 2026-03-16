@@ -3,7 +3,7 @@ import { lisp1 } from "./src/lisp1.mjs";
 import { beautifyCode as _beautifyCode } from "./src/babel-transform.mjs";
 
 export function version() {
-  return "npm:xp-lisp: version 2026.312.11005";
+  return "npm:xp-lisp: version 2026.316.171832";
 }
 
 export function versionNumber() {

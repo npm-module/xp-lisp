@@ -1,4 +1,6 @@
 export function unescape(text) {
+  text = text.replace(/::/g, ";");
+  text = text.replace(/%%/g, "`");
   text = text.replace(/{{/g, "${");
   text = text.replace(/}}/g, "}");
   text = text.replace(/<string>/g, "`");
